@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Hotels</title>
+    <link rel="stylesheet" href="popup.css" />
+    <!--
+    IMPORTANTE (Manifest V3): la política de seguridad (CSP) prohíbe scripts y
+    manejadores "inline" (onclick="..."). Todo el JavaScript va en popup.js
+    y se enlaza al final del <body> con <script src>.
+  -->
+</head>
+
+<body>
+    <header class="app-header">
+        <h1>Alojamientos en Colombia</h1>
+        <p>Busca en Booking, Airbnb y PriceTravel por ciudad, precio por noche y accesibilidad.</p>
+    </header>
+
+    <!-- El <form> agrupa los campos; popup.js intercepta el "submit". -->
+    <form id="searchForm" novalidate>
+
+        <!-- ===== Fuentes ===== -->
+        <fieldset>
+            <legend>Dónde buscar</legend>
+            <!-- Los checkboxes se generan desde popup.js (objeto SOURCES) -->
+            <div id="sourceList" class="cities"></div>
+        </fieldset>
+
+        <!-- ===== Ciudades ===== -->
+        <fieldset>
+            <legend>Ciudades</legend>
+            <!-- Los checkboxes se generan desde popup.js (lista CITIES) -->
+            <div id="cityList" class="cities"></div>
+
+            <div class="mini-actions">
+                <button type="button" id="selectAllBtn" class="link-button">Todas</button>
+                <button type="button" id="selectNoneBtn" class="link-button">Ninguna</button>
+            </div>
+        </fieldset>
+
+        <!-- ===== Zona (opcional) ===== -->
+        <fieldset>
+            <legend>Zona específica (opcional)</legend>
+            <label class="field">
+                <span>Una o varias zonas, separadas por coma</span>
+                <input type="text" id="zone" placeholder="Ej: Chapinero, Engativá" />
+            </label>
+            <label class="check-inline">
+                <input type="checkbox" id="strictZone" checked />
+                <span>Descartar alojamientos cuya dirección no mencione esa zona</span>
+            </label>
+            <small class="hint">Solo puedes buscar localidades dentro de una ciudad. Cada zona se busca por separado. Déjalo vacío para buscar en toda la ciudad.</small>
+            <small id="zoneNote" class="hint hint-active" hidden></small>
+        </fieldset>
+
+        <!-- ===== Precio ===== -->
+        <fieldset>
+            <legend>Precio por noche (COP)</legend>
+            <div class="row">
+                <label class="field">
+                    <span>Mínimo</span>
+                    <input type="number" id="minPrice" min="0" step="10000" placeholder="Sin mínimo" />
+                </label>
+                <label class="field">
+                    <span>Máximo</span>
+                    <input type="number" id="maxPrice" min="0" step="10000" placeholder="Sin máximo" />
+                </label>
+            </div>
+        </fieldset>
+
+        <!-- ===== Fechas y huéspedes ===== -->
+        <fieldset>
+            <legend>Estancia</legend>
+            <div class="row">
+                <label class="field">
+                    <span>Entrada</span>
+                    <input type="date" id="checkin" required />
+                </label>
+                <label class="field">
+                    <span>Salida</span>
+                    <input type="date" id="checkout" required />
+                </label>
+            </div>
+            <div class="row">
+                <label class="field">
+                    <span>Adultos</span>
+                    <input type="number" id="adults" min="1" max="10" value="2" />
+                </label>
+                <label class="field">
+                    <span>Resultados por ciudad</span>
+                    <input type="number" id="maxResults" min="1" max="75" step="1" value="25" />
+                </label>
+            </div>
+        </fieldset>
+
+        <!-- ===== Booleano: movilidad reducida ===== -->
+        <label class="switch">
+            <input type="checkbox" id="reducedMobility" />
+            <span class="track" aria-hidden="true"></span>
+            <span class="label-text">
+                Solo alojamientos con instalaciones para movilidad reducida
+                <small>Si lo dejas apagado, no se aplica ningún filtro de accesibilidad. Solo Booking lo aplica por ahora.</small>
+            </span>
+        </label>
+
+        <!-- ===== Botones ===== -->
+        <div class="buttons">
+            <button type="submit" id="searchBtn" class="primary">Buscar alojamientos</button>
+            <button type="button" id="cancelBtn" class="secondary" hidden>Cancelar</button>
+        </div>
+    </form>
+
+    <!-- Mensaje de validación / error del formulario -->
+    <p id="notice" class="notice" role="alert" hidden></p>
+
+    <!-- ===== Progreso ===== -->
+    <section id="progress" class="progress-box" hidden>
+        <p id="progressText"></p>
+        <progress id="progressBar" value="0" max="1"></progress>
+    </section>
+
+    <!-- ===== Resultados ===== -->
+    <section id="results" hidden>
+        <div class="results-header">
+            <h2 id="resultsTitle">Resultados</h2>
+            <button type="button" id="csvBtn" class="secondary">Descargar CSV</button>
+        </div>
+        <ul id="errorList" class="errors"></ul>
+        <div class="table-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Alojamiento</th>
+                        <th>Ciudad / zona</th>
+                        <th>Fuente</th>
+                        <th class="num">Por noche</th>
+                        <th class="num">Nota</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Registro de fuentes (define SOURCES). Va ANTES de popup.js. -->
+    <script src="../sources/registry.js"></script>
+    <script src="../sources/booking.js"></script>
+    <script src="../sources/airbnb.js"></script>
+    <script src="../sources/pricetravel.js"></script>
+    <script src="popup.js"></script>
+</body>
+
+</html>

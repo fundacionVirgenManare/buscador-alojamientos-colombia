@@ -1,0 +1,383 @@
+/* ============================================================================
+   popup/popup.css
+   Tokens de diseño arriba (colores, radios); el resto solo los consume.
+   Se usa la fuente del sistema: las extensiones no pueden cargar fuentes
+   externas por defecto (CSP de Manifest V3).
+   ========================================================================= */
+:root {
+    --ink: #17212b;
+    /* texto principal */
+    --muted: #5d6b78;
+    /* texto secundario */
+    --paper: #ffffff;
+    /* fondo */
+    --mist: #f2f5f7;
+    /* fondos de campos y filas alternas */
+    --line: #d9e0e6;
+    /* bordes */
+    --accent: #0b6e6e;
+    /* botón principal, foco, interruptor activo */
+    --accent-dark: #084f4f;
+    --alert: #a63d1a;
+    /* errores */
+    --radius: 6px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    width: 460px;
+    /* ancho fijo del popup (Chrome permite hasta 800px) */
+    margin: 0;
+    padding: 16px;
+    background: var(--paper);
+    color: var(--ink);
+    font: 13px/1.45 "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+/* ---------- Cabecera ---------- */
+.app-header h1 {
+    margin: 0 0 2px;
+    font-size: 18px;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+}
+
+.app-header p {
+    margin: 0 0 14px;
+    color: var(--muted);
+}
+
+/* ---------- Grupos del formulario ---------- */
+fieldset {
+    margin: 0 0 12px;
+    padding: 10px 12px 12px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+}
+
+legend {
+    padding: 0 6px;
+    font-weight: 600;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 6px;
+}
+
+.row:first-of-type {
+    margin-top: 0;
+}
+
+.field {
+    display: block;
+    margin-top: 8px;
+}
+
+.row .field {
+    margin-top: 0;
+}
+
+.field>span {
+    display: block;
+    margin-bottom: 3px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select {
+    width: 100%;
+    padding: 7px 8px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--mist);
+    color: inherit;
+    font: inherit;
+}
+
+/* Foco visible para navegación con teclado */
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* ---------- Ciudades (rejilla de checkboxes) ---------- */
+.cities {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px 8px;
+}
+
+.cities label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.cities input {
+    accent-color: var(--accent);
+}
+
+.mini-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 6px;
+}
+
+.link-button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--accent);
+    font: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* ---------- Interruptor (checkbox de movilidad reducida) ---------- */
+.switch {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 4px 0 14px;
+    cursor: pointer;
+}
+
+.switch input {
+    position: absolute;
+    opacity: 0;
+}
+
+/* oculto pero accesible por teclado */
+.track {
+    flex: none;
+    position: relative;
+    width: 34px;
+    height: 20px;
+    margin-top: 1px;
+    border-radius: 10px;
+    background: var(--line);
+    transition: background 0.15s;
+}
+
+.track::after {
+    /* la "perilla" */
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--paper);
+    transition: transform 0.15s;
+}
+
+.switch input:checked+.track {
+    background: var(--accent);
+}
+
+.switch input:checked+.track::after {
+    transform: translateX(14px);
+}
+
+.switch input:focus-visible+.track {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.label-text small {
+    display: block;
+    color: var(--muted);
+}
+
+/* ---------- Botones ---------- */
+.buttons {
+    display: flex;
+    gap: 8px;
+}
+
+button {
+    font: inherit;
+    cursor: pointer;
+}
+
+.primary,
+.secondary {
+    padding: 9px 14px;
+    border-radius: var(--radius);
+    font-weight: 600;
+}
+
+.primary {
+    flex: 1;
+    border: 0;
+    background: var(--accent);
+    color: #fff;
+}
+
+.primary:hover:not(:disabled) {
+    background: var(--accent-dark);
+}
+
+.primary:disabled {
+    opacity: 0.55;
+    cursor: progress;
+}
+
+.secondary {
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink);
+}
+
+.secondary:hover {
+    background: var(--mist);
+}
+
+[hidden] {
+    display: none !important;
+}
+
+/* ---------- Avisos y progreso ---------- */
+.notice {
+    margin: 10px 0 0;
+    color: var(--alert);
+    font-weight: 600;
+}
+
+.progress-box {
+    margin-top: 14px;
+}
+
+.progress-box p {
+    margin: 0 0 4px;
+    color: var(--muted);
+}
+
+progress {
+    width: 100%;
+    height: 8px;
+    accent-color: var(--accent);
+}
+
+/* ---------- Resultados ---------- */
+#results {
+    margin-top: 16px;
+}
+
+.results-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.results-header h2 {
+    margin: 0;
+    font-size: 15px;
+}
+
+.errors {
+    margin: 0 0 6px;
+    padding-left: 16px;
+    color: var(--alert);
+    font-size: 12px;
+}
+
+.table-scroll {
+    max-height: 320px;
+    overflow: auto;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 6px 8px;
+    text-align: left;
+    vertical-align: top;
+}
+
+th {
+    position: sticky;
+    top: 0;
+    background: var(--mist);
+    font-weight: 600;
+}
+
+tbody tr:nth-child(even) {
+    background: var(--mist);
+}
+
+.num {
+    text-align: right;
+    white-space: nowrap;
+}
+
+td a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+td a:hover {
+    text-decoration: underline;
+}
+
+/* Respeta a quien desactiva las animaciones en su sistema */
+@media (prefers-reduced-motion: reduce) {
+
+    .track,
+    .track::after {
+        transition: none;
+    }
+}
+
+/* ===== Zona (opcional) ===== */
+.check-inline {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.check-inline input {
+  margin-top: 2px;
+}
+.hint {
+  display: block;
+  margin-top: 6px;
+  color: #6b7280;
+  font-size: 11px;
+}
+
+/* ===== Bloqueo ciudades <-> zona ===== */
+.cities label:has(input:disabled),
+.mini-actions .link-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.field input:disabled,
+.check-inline:has(input:disabled) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.hint-active {
+  color: #92400e;
+  font-weight: 600;
+}
